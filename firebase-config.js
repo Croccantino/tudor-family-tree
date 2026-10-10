@@ -6,11 +6,11 @@
 // NOTE: this web config is NOT secret — it is meant to be public in the browser.
 // Security is enforced by the Firebase "rules" (see database.rules.json).
 export const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT.firebaseapp.com",
-  databaseURL: "PASTE_DATABASE_URL",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyAh1ltQ0UeQSTuQiDfa672WxTQkIJQ2tjg",
+  authDomain: "royalfamilyrtree.firebaseapp.com",
+  databaseURL: "https://royalfamilyrtree-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "royalfamilyrtree",
+  storageBucket: "royalfamilyrtree.firebasestorage.app",
+  messagingSenderId: "477627551836",
+  appId: "1:477627551836:web:9864c8d6b9bbef35071699"
 };
