@@ -6,6 +6,7 @@ const PEOPLE = {
     name: "Elizabeth of York",
     gender: "female",
     initial: "E",
+    img: "images/elizabeth-of-york.webp",
     sub: "Queen consort of England · 11 February 1466 – 11 February 1503",
     tags: ["Daughter of Edward IV", "Mother of Henry VIII", "Founded the Tudor dynasty"],
     body: `
@@ -17,6 +18,7 @@ const PEOPLE = {
     name: "Henry VII",
     gender: "male",
     initial: "H",
+    img: "images/henry-vii.webp",
     sub: "King of England, founder of the House of Tudor · 28 January 1457 – 21 April 1509",
     tags: ["Reigned 1485–1509", "Won Bosworth Field", "Restored royal finances"],
     body: `
@@ -50,6 +52,7 @@ const PEOPLE = {
     name: "Henry VIII",
     gender: "male",
     initial: "H",
+    img: "images/henry-viii.webp",
     sub: "King of England · 28 June 1491 – 28 January 1547",
     tags: ["Reigned 1509–1547", "Six wives", "Broke with Rome"],
     body: `
@@ -72,6 +75,7 @@ const PEOPLE = {
     name: "Catherine of Aragon",
     gender: "female",
     initial: "C",
+    img: "images/catherine-of-aragon.webp",
     sub: "First wife of Henry VIII · 16 December 1485 – 7 January 1536",
     tags: ["Spanish infanta", "Married Henry in 1509", "Mother of Mary I"],
     body: `
@@ -83,6 +87,7 @@ const PEOPLE = {
     name: "Anne Boleyn",
     gender: "female",
     initial: "A",
+    img: "images/anne-boleyn.webp",
     sub: "Second wife of Henry VIII · c. 1501/1507 – 19 May 1536",
     tags: ["Mother of Elizabeth I", "Key figure of the Reformation", "Executed 1536"],
     body: `
@@ -94,6 +99,7 @@ const PEOPLE = {
     name: "Jane Seymour",
     gender: "female",
     initial: "J",
+    img: "images/jane-seymour.webp",
     sub: "Third wife of Henry VIII · c. 1508 – 24 October 1537",
     tags: ["Only wife buried as queen", "Mother of Edward VI", "Died after childbirth"],
     body: `
@@ -105,6 +111,7 @@ const PEOPLE = {
     name: "Mary I",
     gender: "female",
     initial: "M",
+    img: "images/mary-i.webp",
     sub: "Queen of England · 18 February 1516 – 17 November 1558",
     tags: ["First queen regnant", "Daughter of Henry & Catherine", "Married Philip II of Spain"],
     body: `
@@ -116,6 +123,7 @@ const PEOPLE = {
     name: "Elizabeth I",
     gender: "female",
     initial: "E",
+    img: "images/elizabeth-i.webp",
     sub: "Queen of England · 7 September 1533 – 24 March 1603",
     tags: ["Reigned 1558–1603", "\"The Virgin Queen\"", "Defeat of the Spanish Armada"],
     body: `
@@ -127,6 +135,7 @@ const PEOPLE = {
     name: "Edward VI",
     gender: "male",
     initial: "E",
+    img: "images/edward-vi.webp",
     sub: "King of England · 12 October 1537 – 6 July 1553",
     tags: ["Reigned 1547–1553", "First Protestant king", "Died aged 15"],
     body: `
@@ -146,8 +155,21 @@ function openModal(id) {
   if (!p) return;
   lastFocused = document.activeElement;
 
-  document.getElementById("modal-avatar").className = "modal-avatar " + p.gender;
-  document.getElementById("modal-avatar").textContent = p.initial;
+  const av = document.getElementById("modal-avatar");
+  av.className = "modal-avatar " + p.gender;
+  av.textContent = p.initial;
+  if (p.img) {
+    const im = document.createElement("img");
+    im.src = p.img;
+    im.alt = "";
+    av.textContent = "";
+    av.appendChild(im);
+    av.classList.add("has-photo");
+    im.addEventListener("error", () => {
+      av.classList.remove("has-photo");
+      av.textContent = p.initial;
+    });
+  }
   document.getElementById("modal-title").textContent = p.name;
   document.getElementById("modal-sub").textContent = p.sub;
 
@@ -254,6 +276,25 @@ document.querySelectorAll(".person").forEach(btn => {
   btn.addEventListener("click", () => {
     if (dragMoved) return;
     openModal(btn.dataset.id);
+  });
+});
+
+/* ---------- portraits ---------- */
+document.querySelectorAll(".person").forEach(btn => {
+  const p = PEOPLE[btn.dataset.id];
+  if (!p || !p.img) return;
+  const av = btn.querySelector(".avatar");
+  if (!av) return;
+  const im = document.createElement("img");
+  im.src = p.img;
+  im.alt = "";
+  im.loading = "lazy";
+  av.textContent = "";
+  av.appendChild(im);
+  av.classList.add("has-photo");
+  im.addEventListener("error", () => {
+    av.classList.remove("has-photo");
+    av.textContent = p.initial;
   });
 });
 
