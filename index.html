@@ -20,6 +20,7 @@
   <button id="zoom-in" type="button" aria-label="Zoom in">Zoom +</button>
   <button id="zoom-out" type="button" aria-label="Zoom out">Zoom −</button>
   <button id="zoom-reset" type="button" aria-label="Reset view">Reset view</button>
+  <button id="guestbook-btn" type="button">📖 Guestbook</button>
   <div class="legend" aria-hidden="true">
     <span><span class="swatch f"></span>Women</span>
     <span><span class="swatch m"></span>Men</span>
@@ -171,6 +172,32 @@
   </div>
 </div>
 
+<!-- Guestbook -->
+<div class="gb-overlay" id="gb-overlay" hidden>
+  <div class="gb-panel" role="dialog" aria-modal="true" aria-labelledby="gb-title">
+    <button class="gb-close" id="gb-close" type="button" aria-label="Close">×</button>
+    <h2 id="gb-title">📖 Guestbook</h2>
+    <p class="gb-sub">Leave a message about the Tudor family tree — it will appear for everyone.</p>
+
+    <form id="gb-form" class="gb-form" autocomplete="off">
+      <input id="gb-name" type="text" maxlength="40" placeholder="Your name" autocomplete="name" required>
+      <textarea id="gb-text" maxlength="280" rows="3" placeholder="Your message (max 280 characters)" required></textarea>
+      <input id="gb-hp" class="gb-hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="gb-actions">
+        <span class="gb-count" id="gb-count">0 / 280</span>
+        <button type="submit" id="gb-submit">Post message</button>
+      </div>
+      <p class="gb-status" id="gb-status" role="status"></p>
+    </form>
+
+    <div class="gb-list-head">Recent messages</div>
+    <ul class="gb-list" id="gb-list">
+      <li class="gb-empty">Loading…</li>
+    </ul>
+  </div>
+</div>
+
 <script src="script.js"></script>
+<script type="module" src="guestbook.js"></script>
 </body>
 </html>

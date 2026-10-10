@@ -467,9 +467,183 @@ header p {
 
 @media print {
   body { overflow: visible; background: #fff; color: #000; }
-  .toolbar, .footnote, .modal-overlay { display: none !important; }
+  .toolbar, .footnote, .modal-overlay, .gb-overlay { display: none !important; }
   .viewport { overflow: visible; height: auto; }
   .canvas { position: static; transform: none !important; }
   header h1 { color: #8a5a00; }
   header p { color: #555; }
+}
+
+/* ---------- guestbook ---------- */
+.gb-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10, 7, 24, .78);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  animation: fade-in .2s ease;
+}
+
+.gb-overlay[hidden] { display: none; }
+
+.gb-panel {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #241b45, #171230);
+  border: 2px solid var(--gold);
+  border-radius: 18px;
+  padding: 24px 24px 18px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+  animation: modal-in .25s cubic-bezier(.2, .9, .3, 1.2);
+}
+
+.gb-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .25);
+  background: rgba(255, 255, 255, .07);
+  color: #efe9ff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.gb-close:hover { background: rgba(255, 255, 255, .16); }
+
+.gb-panel h2 {
+  font-family: "Cinzel", Georgia, serif;
+  color: var(--gold);
+  font-size: 22px;
+  padding-right: 30px;
+}
+
+.gb-sub {
+  color: var(--muted);
+  font-style: italic;
+  margin: 4px 0 14px;
+  font-size: 15px;
+}
+
+.gb-form { display: flex; flex-direction: column; gap: 8px; }
+
+.gb-form input,
+.gb-form textarea {
+  font-family: inherit;
+  font-size: 15px;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .18);
+  color: #efe9ff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.gb-form input::placeholder,
+.gb-form textarea::placeholder { color: #8b81b0; }
+
+.gb-form input:focus,
+.gb-form textarea:focus { outline: none; border-color: var(--gold); }
+
+.gb-form input:disabled,
+.gb-form textarea:disabled { opacity: .5; }
+
+.gb-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  opacity: 0;
+}
+
+.gb-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gb-count { font-size: 12.5px; color: var(--muted); }
+
+.gb-actions button {
+  font-family: "Cinzel", Georgia, serif;
+  background: var(--gold);
+  color: #241b45;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: filter .15s, transform .1s;
+}
+
+.gb-actions button:hover:not(:disabled) { filter: brightness(1.08); }
+.gb-actions button:active:not(:disabled) { transform: scale(.97); }
+.gb-actions button:disabled { opacity: .5; cursor: default; }
+
+.gb-status { min-height: 18px; font-size: 13.5px; color: #ffd7e6; margin-top: 2px; }
+.gb-status.ok { color: #b6f0c4; }
+
+.gb-list-head {
+  margin: 14px 0 8px;
+  font-family: "Cinzel", Georgia, serif;
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  padding-top: 12px;
+}
+
+.gb-list {
+  list-style: none;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.gb-item {
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .09);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.gb-item .who {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--gold);
+  font-family: "Cinzel", Georgia, serif;
+}
+
+.gb-item .who time { color: var(--muted); font-family: inherit; }
+
+.gb-item .msg {
+  margin-top: 4px;
+  color: #efe9ff;
+  font-size: 15px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.gb-empty {
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+  padding: 14px;
 }
