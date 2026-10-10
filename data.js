@@ -250,6 +250,8 @@ export const BASE_TREE = {
           "spouses": [
             {
               "id": "catherine",
+              "side": "left",
+              "married": "♥ m. 1509",
               "children": [
                 {
                   "id": "mary1",
@@ -259,6 +261,8 @@ export const BASE_TREE = {
             },
             {
               "id": "anne",
+              "side": "left",
+              "married": "♥ m. 1533",
               "children": [
                 {
                   "id": "elizabeth1",
@@ -268,6 +272,8 @@ export const BASE_TREE = {
             },
             {
               "id": "jane",
+              "side": "left",
+              "married": "♥ m. 1536",
               "children": [
                 {
                   "id": "edward6",

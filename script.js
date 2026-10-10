@@ -65,55 +65,61 @@ function marriage(label) {
   return d;
 }
 
+function coupleEl(node, s) {
+  const c = el("div", "couple");
+  const a = card(node.id), b = card(s.id);
+  if (s.side === "left") c.append(b, marriage(s.married), a);
+  else c.append(a, marriage(s.married), b);
+  return c;
+}
+
+function marriageUnit(node, s) {
+  const wrap = el("div", "unit");
+  if (s.id == null) wrap.append(card(node.id));
+  else wrap.append(coupleEl(node, s));
+  if (s.children && s.children.length) {
+    wrap.append(el("div", "stem grown"));
+    wrap.append(siblingsRow(s.children));
+  }
+  return wrap;
+}
+
 function renderUnit(node) {
   const spouses = node.spouses || [];
   if (spouses.length === 0) return card(node.id);
+  if (spouses.length === 1) return marriageUnit(node, spouses[0]);
 
-  if (spouses.length === 1) {
-    const s = spouses[0];
-    const wrap = el("div", "unit");
-    if (s.id == null) {
-      wrap.append(card(node.id));
-    } else {
-      const couple = el("div", "couple");
-      const a = card(node.id), b = card(s.id);
-      if (s.side === "left") couple.append(b, marriage(s.married), a);
-      else couple.append(a, marriage(s.married), b);
-      wrap.append(couple);
-    }
-    if (s.children && s.children.length) {
-      wrap.append(el("div", "stem grown"));
-      wrap.append(siblingsRow(s.children));
-    }
-    return wrap;
-  }
-
-  const wrap = el("div", "unit");
-  wrap.append(card(node.id));
-  const stem = el("div", "stem");
-  if (node.note) stem.append(el("span", "stem-note", node.note));
-  wrap.append(stem);
-  const bw = el("div", "branches-wrap");
-  const br = el("div", "branches");
+  // Multiple spouses (only reachable for the root): repeat the person per spouse.
+  const outer = el("div", "unit");
+  if (node.note) outer.append(el("div", "couples-note", node.note));
+  const row = el("div", "couples");
   spouses.forEach(s => {
-    const col = el("div", "branch-col");
-    if (s.id != null) col.append(card(s.id));
-    col.append(el("div", "stem"));
-    (s.children || []).forEach(ch => col.append(renderUnit(ch)));
-    br.append(col);
+    const cell = el("div", "couple-cell");
+    cell.append(marriageUnit(node, s));
+    row.append(cell);
   });
-  bw.append(br);
-  wrap.append(bw);
-  return wrap;
+  outer.append(row);
+  return outer;
 }
 
 function siblingsRow(children) {
   const row = el("div", "siblings");
   children.forEach(ch => {
-    const col = el("div", "sib-col");
-    col.append(renderUnit(ch));
-    if (col.querySelector(".couple")) col.classList.add("sib-wide");
-    row.append(col);
+    const spouses = ch.spouses || [];
+    if (spouses.length > 1) {
+      // repeat this person beside each spouse: one column per marriage
+      spouses.forEach(s => {
+        const col = el("div", "sib-col");
+        col.append(marriageUnit(ch, s));
+        if (col.querySelector(".couple")) col.classList.add("sib-wide");
+        row.append(col);
+      });
+    } else {
+      const col = el("div", "sib-col");
+      col.append(renderUnit(ch));
+      if (col.querySelector(".couple")) col.classList.add("sib-wide");
+      row.append(col);
+    }
   });
   return row;
 }
