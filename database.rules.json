@@ -7,6 +7,11 @@
         ".write": "!data.exists() && newData.exists()",
         ".validate": "newData.hasChildren(['name','text','createdAt']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 280"
       }
+    },
+    "tree": {
+      ".read": true,
+      ".write": "auth != null",
+      ".validate": "newData.hasChildren(['people','layout'])"
     }
   }
 }

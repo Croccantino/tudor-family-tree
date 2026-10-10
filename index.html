@@ -21,6 +21,8 @@
   <button id="zoom-out" type="button" aria-label="Zoom out">Zoom −</button>
   <button id="zoom-reset" type="button" aria-label="Reset view">Reset view</button>
   <button id="guestbook-btn" type="button">📖 Guestbook</button>
+  <button id="edit-btn" type="button">✏️ Edit</button>
+  <button id="account-btn" type="button">👤 Sign in</button>
   <div class="legend" aria-hidden="true">
     <span><span class="swatch f"></span>Women</span>
     <span><span class="swatch m"></span>Men</span>
@@ -30,137 +32,12 @@
 </div>
 
 <div class="viewport" id="viewport">
-  <div class="canvas" id="canvas">
-    <section class="gen1">
-      <!-- Generation 1: Elizabeth of York + Henry VII -->
-      <div class="couple">
-        <button class="person female" type="button" data-id="elizabeth-york">
-          <span class="badge" title="Queen consort">👑</span>
-          <span class="avatar">E</span>
-          <span class="p-name">Elizabeth of York</span>
-          <span class="p-dates">1466–1503</span>
-          <span class="role">Queen consort</span>
-        </button>
-        <div class="marriage" aria-hidden="true"><span>♥ m. 1486</span></div>
-        <button class="person male monarch" type="button" data-id="henry7">
-          <span class="badge" title="King of England">👑</span>
-          <span class="avatar">H</span>
-          <span class="p-name">Henry VII</span>
-          <span class="p-dates">1457–1509</span>
-          <span class="role">King of England</span>
-        </button>
-      </div>
-
-      <div class="stem grown" aria-hidden="true"></div>
-
-      <!-- Generation 2: their children -->
-      <div class="siblings">
-        <div class="sib-col">
-          <button class="person male" type="button" data-id="arthur">
-            <span class="badge" title="Died young">🕯</span>
-            <span class="avatar">A</span>
-            <span class="p-name">Arthur, Prince of Wales</span>
-            <span class="p-dates">1486–1502</span>
-            <span class="role">Heir apparent</span>
-          </button>
-        </div>
-
-        <div class="sib-col">
-          <button class="person female" type="button" data-id="margaret">
-            <span class="badge" title="Queen of Scots">👑</span>
-            <span class="avatar">M</span>
-            <span class="p-name">Margaret Tudor</span>
-            <span class="p-dates">1489–1541</span>
-            <span class="role">Queen of Scots</span>
-          </button>
-        </div>
-
-        <div class="sib-col">
-          <button class="person male monarch" type="button" data-id="henry8">
-            <span class="badge" title="King of England">👑</span>
-            <span class="avatar">H</span>
-            <span class="p-name">Henry VIII</span>
-            <span class="p-dates">1491–1547</span>
-            <span class="role">King of England</span>
-          </button>
-
-          <div class="stem" aria-hidden="true"><span class="stem-note">3 of his 6 wives — those who had children</span></div>
-
-          <!-- Henry VIII's wives and their children -->
-          <div class="henry-branches">
-            <div class="branches">
-              <div class="branch-col">
-                <button class="person female" type="button" data-id="catherine">
-                  <span class="avatar">C</span>
-                  <span class="p-name">Catherine of Aragon</span>
-                  <span class="p-dates">1485–1536</span>
-                  <span class="role">1st wife</span>
-                </button>
-                <div class="stem" aria-hidden="true"></div>
-                <button class="person female monarch" type="button" data-id="mary1">
-                  <span class="badge" title="Queen regnant">👑</span>
-                  <span class="avatar">M</span>
-                  <span class="p-name">Mary I</span>
-                  <span class="p-dates">1516–1558</span>
-                  <span class="role">Queen regnant</span>
-                </button>
-              </div>
-
-              <div class="branch-col">
-                <button class="person female" type="button" data-id="anne">
-                  <span class="badge" title="Executed 1536">⚔</span>
-                  <span class="avatar">A</span>
-                  <span class="p-name">Anne Boleyn</span>
-                  <span class="p-dates">c. 1501–1536</span>
-                  <span class="role">2nd wife</span>
-                </button>
-                <div class="stem" aria-hidden="true"></div>
-                <button class="person female monarch" type="button" data-id="elizabeth1">
-                  <span class="badge" title="Queen regnant">👑</span>
-                  <span class="avatar">E</span>
-                  <span class="p-name">Elizabeth I</span>
-                  <span class="p-dates">1533–1603</span>
-                  <span class="role">Queen regnant</span>
-                </button>
-              </div>
-
-              <div class="branch-col">
-                <button class="person female" type="button" data-id="jane">
-                  <span class="avatar">J</span>
-                  <span class="p-name">Jane Seymour</span>
-                  <span class="p-dates">c. 1508–1537</span>
-                  <span class="role">3rd wife</span>
-                </button>
-                <div class="stem" aria-hidden="true"></div>
-                <button class="person male monarch" type="button" data-id="edward6">
-                  <span class="badge" title="King of England">👑</span>
-                  <span class="avatar">E</span>
-                  <span class="p-name">Edward VI</span>
-                  <span class="p-dates">1537–1553</span>
-                  <span class="role">King of England</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="sib-col">
-          <button class="person female" type="button" data-id="mary-tudor">
-            <span class="badge" title="Queen of France">👑</span>
-            <span class="avatar">M</span>
-            <span class="p-name">Mary Tudor</span>
-            <span class="p-dates">1496–1533</span>
-            <span class="role">Queen of France</span>
-          </button>
-        </div>
-      </div>
-    </section>
-  </div>
+  <div class="canvas" id="canvas"></div>
 </div>
 
 <p class="footnote">House of Tudor · Interactive family tree — click any card to open its biography</p>
 
-<!-- Modal -->
+<!-- Modal / biography -->
 <div class="modal-overlay" id="modal-overlay" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal">
     <button class="modal-close" id="modal-close" type="button" aria-label="Close">×</button>
@@ -197,7 +74,72 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<!-- Admin sign in -->
+<div class="auth-overlay" id="auth-overlay" hidden>
+  <div class="auth-panel" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <button class="auth-close" id="auth-close" type="button" aria-label="Close">×</button>
+    <h2 id="auth-title">🔐 Admin sign in</h2>
+    <form id="auth-form" autocomplete="on">
+      <input id="auth-email" type="email" placeholder="Email" autocomplete="username" required>
+      <input id="auth-pass" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button type="submit">Sign in</button>
+    </form>
+    <div id="auth-signedin" hidden>
+      <p>Signed in as <strong id="auth-user"></strong>.</p>
+      <button id="auth-signout" type="button">Sign out</button>
+    </div>
+    <p class="auth-status" id="auth-status" role="status"></p>
+  </div>
+</div>
+
+<!-- Person editor (admin) -->
+<div class="ed-overlay" id="ed-overlay" hidden>
+  <div class="ed-panel" role="dialog" aria-modal="true" aria-labelledby="ed-title">
+    <button class="ed-close" id="ed-close" type="button" aria-label="Close">×</button>
+    <h2 id="ed-title">Edit</h2>
+    <form id="ed-form" class="ed-form">
+      <div class="ed-photo">
+        <div class="ed-photo-preview" id="ed-photo-preview"></div>
+        <div class="ed-photo-actions">
+          <label class="ed-file">Choose photo<input id="ed-photo" type="file" accept="image/*" hidden></label>
+          <label class="ed-check"><input id="ed-remove-photo" type="checkbox"> remove current photo</label>
+        </div>
+      </div>
+
+      <label>Name <input id="ed-name" type="text" maxlength="60"></label>
+      <div class="ed-row">
+        <label>Dates <input id="ed-dates" type="text" maxlength="40" placeholder="1491–1547"></label>
+        <label>Role <input id="ed-role" type="text" maxlength="40" placeholder="King of England"></label>
+      </div>
+      <div class="ed-row">
+        <label>Gender
+          <span class="ed-radio">
+            <label><input type="radio" name="ed-gender" value="female"> Female</label>
+            <label><input type="radio" name="ed-gender" value="male"> Male</label>
+          </span>
+        </label>
+        <label class="ed-check"><input id="ed-monarch" type="checkbox"> Monarch (gold border)</label>
+      </div>
+      <div class="ed-row">
+        <label>Badge icon <input id="ed-badge-icon" type="text" maxlength="4" placeholder="👑"></label>
+        <label>Badge label <input id="ed-badge-title" type="text" maxlength="40" placeholder="King of England"></label>
+      </div>
+      <label>Short description <input id="ed-sub" type="text" placeholder="King of England · 1491–1547"></label>
+      <label>Tags (comma separated) <input id="ed-tags" type="text" placeholder="Reigned 1509–1547, Six wives"></label>
+      <label>Biography <textarea id="ed-body" rows="6" placeholder="Write the biography. Blank line = new paragraph. Use **bold**."></textarea></label>
+
+      <div class="ed-actions">
+        <button type="submit" class="ed-save">Save</button>
+        <button type="button" id="ed-add-child">+ Add child</button>
+        <button type="button" id="ed-add-spouse">+ Add spouse</button>
+        <button type="button" id="ed-delete" class="ed-danger">Delete</button>
+      </div>
+      <p class="ed-status" id="ed-status" role="status"></p>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
 <script type="module" src="guestbook.js"></script>
 </body>
 </html>
