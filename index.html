@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tudor Family Tree — Interactive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1><span class="crown">👑</span> The Tudor Family Tree <span class="crown">👑</span></h1>
+  <p>Henry VII &amp; Elizabeth of York → their children → Henry VIII, his three wives who bore him heirs, and the last Tudor monarchs</p>
+</header>
+
+<div class="toolbar">
+  <button id="zoom-in" type="button" aria-label="Zoom in">Zoom +</button>
+  <button id="zoom-out" type="button" aria-label="Zoom out">Zoom −</button>
+  <button id="zoom-reset" type="button" aria-label="Reset view">Reset view</button>
+  <div class="legend" aria-hidden="true">
+    <span><span class="swatch f"></span>Women</span>
+    <span><span class="swatch m"></span>Men</span>
+    <span>♥ marriage</span>
+  </div>
+  <span class="hint">Click a person for details · drag to move · scroll to zoom</span>
+</div>
+
+<div class="viewport" id="viewport">
+  <div class="canvas" id="canvas">
+    <section class="gen1">
+      <!-- Generation 1: Elizabeth of York + Henry VII -->
+      <div class="couple">
+        <button class="person female" type="button" data-id="elizabeth-york">
+          <span class="badge" title="Queen consort">👑</span>
+          <span class="avatar">E</span>
+          <span class="p-name">Elizabeth of York</span>
+          <span class="p-dates">1466–1503</span>
+          <span class="role">Queen consort</span>
+        </button>
+        <div class="marriage" aria-hidden="true"><span>♥ m. 1486</span></div>
+        <button class="person male monarch" type="button" data-id="henry7">
+          <span class="badge" title="King of England">👑</span>
+          <span class="avatar">H</span>
+          <span class="p-name">Henry VII</span>
+          <span class="p-dates">1457–1509</span>
+          <span class="role">King of England</span>
+        </button>
+      </div>
+
+      <div class="stem grown" aria-hidden="true"></div>
+
+      <!-- Generation 2: their children -->
+      <div class="siblings">
+        <div class="sib-col">
+          <button class="person male" type="button" data-id="arthur">
+            <span class="badge" title="Died young">🕯</span>
+            <span class="avatar">A</span>
+            <span class="p-name">Arthur, Prince of Wales</span>
+            <span class="p-dates">1486–1502</span>
+            <span class="role">Heir apparent</span>
+          </button>
+        </div>
+
+        <div class="sib-col">
+          <button class="person female" type="button" data-id="margaret">
+            <span class="badge" title="Queen of Scots">👑</span>
+            <span class="avatar">M</span>
+            <span class="p-name">Margaret Tudor</span>
+            <span class="p-dates">1489–1541</span>
+            <span class="role">Queen of Scots</span>
+          </button>
+        </div>
+
+        <div class="sib-col">
+          <button class="person male monarch" type="button" data-id="henry8">
+            <span class="badge" title="King of England">👑</span>
+            <span class="avatar">H</span>
+            <span class="p-name">Henry VIII</span>
+            <span class="p-dates">1491–1547</span>
+            <span class="role">King of England</span>
+          </button>
+
+          <div class="stem" aria-hidden="true"><span class="stem-note">3 of his 6 wives — those who had children</span></div>
+
+          <!-- Henry VIII's wives and their children -->
+          <div class="henry-branches">
+            <div class="branches">
+              <div class="branch-col">
+                <button class="person female" type="button" data-id="catherine">
+                  <span class="avatar">C</span>
+                  <span class="p-name">Catherine of Aragon</span>
+                  <span class="p-dates">1485–1536</span>
+                  <span class="role">1st wife</span>
+                </button>
+                <div class="stem" aria-hidden="true"></div>
+                <button class="person female monarch" type="button" data-id="mary1">
+                  <span class="badge" title="Queen regnant">👑</span>
+                  <span class="avatar">M</span>
+                  <span class="p-name">Mary I</span>
+                  <span class="p-dates">1516–1558</span>
+                  <span class="role">Queen regnant</span>
+                </button>
+              </div>
+
+              <div class="branch-col">
+                <button class="person female" type="button" data-id="anne">
+                  <span class="badge" title="Executed 1536">⚔</span>
+                  <span class="avatar">A</span>
+                  <span class="p-name">Anne Boleyn</span>
+                  <span class="p-dates">c. 1501–1536</span>
+                  <span class="role">2nd wife</span>
+                </button>
+                <div class="stem" aria-hidden="true"></div>
+                <button class="person female monarch" type="button" data-id="elizabeth1">
+                  <span class="badge" title="Queen regnant">👑</span>
+                  <span class="avatar">E</span>
+                  <span class="p-name">Elizabeth I</span>
+                  <span class="p-dates">1533–1603</span>
+                  <span class="role">Queen regnant</span>
+                </button>
+              </div>
+
+              <div class="branch-col">
+                <button class="person female" type="button" data-id="jane">
+                  <span class="avatar">J</span>
+                  <span class="p-name">Jane Seymour</span>
+                  <span class="p-dates">c. 1508–1537</span>
+                  <span class="role">3rd wife</span>
+                </button>
+                <div class="stem" aria-hidden="true"></div>
+                <button class="person male monarch" type="button" data-id="edward6">
+                  <span class="badge" title="King of England">👑</span>
+                  <span class="avatar">E</span>
+                  <span class="p-name">Edward VI</span>
+                  <span class="p-dates">1537–1553</span>
+                  <span class="role">King of England</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sib-col">
+          <button class="person female" type="button" data-id="mary-tudor">
+            <span class="badge" title="Queen of France">👑</span>
+            <span class="avatar">M</span>
+            <span class="p-name">Mary Tudor</span>
+            <span class="p-dates">1496–1533</span>
+            <span class="role">Queen of France</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<p class="footnote">House of Tudor · Interactive family tree — click any card to open its biography</p>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal">
+    <button class="modal-close" id="modal-close" type="button" aria-label="Close">×</button>
+    <div class="modal-avatar" id="modal-avatar"></div>
+    <h2 id="modal-title"></h2>
+    <p class="modal-sub" id="modal-sub"></p>
+    <div class="modal-tags" id="modal-tags"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
