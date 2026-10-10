@@ -5,7 +5,7 @@ const SDK = "https://www.gstatic.com/firebasejs/10.12.2";
 const configured =
   firebaseConfig &&
   firebaseConfig.apiKey && !String(firebaseConfig.apiKey).startsWith("PASTE") &&
-  firebaseConfig.projectId && !String(firebaseConfig.projectId).startsWith("PASTE");
+  firebaseConfig.databaseURL && !String(firebaseConfig.databaseURL).startsWith("PASTE");
 
 const overlay = document.getElementById("gb-overlay");
 const openBtn = document.getElementById("guestbook-btn");
@@ -45,7 +45,7 @@ function relTime(ts) {
   if (ts && typeof ts.toDate === "function") date = ts.toDate();
   else if (ts instanceof Date) date = ts;
   else if (typeof ts === "number") date = new Date(ts);
-  if (!date) return "just now";
+  if (!date || isNaN(date.getTime())) return "just now";
   const s = Math.floor((Date.now() - date.getTime()) / 1000);
   if (s < 60) return "just now";
   const m = Math.floor(s / 60); if (m < 60) return m + " min ago";
@@ -71,39 +71,47 @@ function renderItem(data) {
   return li;
 }
 
-/* ---------- firebase ---------- */
+function showEmpty(text) {
+  list.innerHTML = "";
+  const li = document.createElement("li");
+  li.className = "gb-empty";
+  li.textContent = text;
+  list.appendChild(li);
+}
+
+function renderAll(items) {
+  if (!items.length) {
+    showEmpty("No messages yet — be the first!");
+    return;
+  }
+  list.innerHTML = "";
+  items.forEach(d => list.appendChild(renderItem(d)));
+}
+
+/* ---------- firebase (Realtime Database) ---------- */
 async function initFirebase() {
-  const [{ initializeApp }, fs] = await Promise.all([
+  const [{ initializeApp }, rtdb] = await Promise.all([
     import(SDK + "/firebase-app.js"),
-    import(SDK + "/firebase-firestore.js")
+    import(SDK + "/firebase-database.js")
   ]);
 
   const app = initializeApp(firebaseConfig);
-  const db = fs.getFirestore(app);
-  const messages = fs.collection(db, "messages");
+  const database = rtdb.getDatabase(app);
+  const messagesRef = rtdb.ref(database, "messages");
 
-  const q = fs.query(messages, fs.orderBy("createdAt", "desc"), fs.limit(50));
-  fs.onSnapshot(q, snap => {
-    list.innerHTML = "";
-    if (snap.empty) {
-      const li = document.createElement("li");
-      li.className = "gb-empty";
-      li.textContent = "No messages yet — be the first!";
-      list.appendChild(li);
-      return;
-    }
-    snap.forEach(doc => list.appendChild(renderItem(doc.data())));
+  const q = rtdb.query(messagesRef, rtdb.orderByChild("createdAt"), rtdb.limitToLast(50));
+  rtdb.onValue(q, snap => {
+    const items = [];
+    snap.forEach(child => items.push(child.val()));
+    items.reverse(); // newest first
+    renderAll(items);
   }, err => {
-    const li = document.createElement("li");
-    li.className = "gb-empty";
-    li.textContent = "Could not load messages: " + err.message;
-    list.innerHTML = "";
-    list.appendChild(li);
+    showEmpty("Could not load messages: " + err.message);
   });
 
   return {
-    add: data => fs.addDoc(messages, data),
-    serverTimestamp: fs.serverTimestamp
+    add: data => rtdb.push(messagesRef, data),
+    serverTimestamp: rtdb.serverTimestamp
   };
 }
 
@@ -159,11 +167,7 @@ if (!configured) {
   submitBtn.disabled = true;
   nameInput.disabled = true;
   textInput.disabled = true;
-  list.innerHTML = "";
-  const li = document.createElement("li");
-  li.className = "gb-empty";
-  li.textContent = "Guestbook not set up yet.";
-  list.appendChild(li);
+  showEmpty("Guestbook not set up yet.");
   statusEl.className = "gb-status";
   statusEl.textContent = "Add your Firebase config in firebase-config.js to enable posting.";
 } else {
