@@ -3,7 +3,6 @@ import { firebaseConfig } from "./firebase-config.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref as dbRef, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 /* ================= data ================= */
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -281,7 +280,7 @@ canvas.addEventListener("click", e => {
 });
 
 /* ================= firebase ================= */
-let db = null, auth = null, storage = null;
+let db = null, auth = null;
 let isAdmin = false, editMode = false;
 const hasFirebase = firebaseConfig && firebaseConfig.apiKey && !String(firebaseConfig.apiKey).startsWith("PASTE");
 
@@ -290,7 +289,6 @@ function initFirebase() {
   const app = initializeApp(firebaseConfig);
   db = getDatabase(app);
   auth = getAuth(app);
-  storage = getStorage(app);
   onAuthStateChanged(auth, user => {
     isAdmin = !!user;
     if (!user && editMode) { editMode = false; updateEditUI(); }
@@ -315,11 +313,31 @@ async function saveData() {
   await set(dbRef(db, "tree"), { people: PEOPLE, layout: TREE });
 }
 
-async function uploadPhoto(personId, file) {
-  const ext = (file.name.split(".").pop() || "png").toLowerCase();
-  const r = storageRef(storage, `photos/${personId}-${Date.now()}.${ext}`);
-  await uploadBytes(r, file);
-  return await getDownloadURL(r);
+function resizePhoto(file, max = 360) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Impossibile leggere il file"));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Immagine non valida"));
+      img.onload = () => {
+        const s = Math.min(1, max / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * s));
+        const h = Math.max(1, Math.round(img.height * s));
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        let url = c.toDataURL("image/webp", 0.82);
+        if (!url.startsWith("data:image/webp")) url = c.toDataURL("image/jpeg", 0.82);
+        resolve(url);
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 /* ================= auth UI ================= */
@@ -403,12 +421,20 @@ function openEditor(id) {
 function closeEditor() { edOverlay.hidden = true; }
 document.getElementById("ed-close").addEventListener("click", closeEditor);
 edOverlay.addEventListener("click", e => { if (e.target === edOverlay) closeEditor(); });
-document.getElementById("ed-photo").addEventListener("change", e => {
-  newPhoto = e.target.files[0] || null;
-  if (newPhoto) {
-    const prev = document.getElementById("ed-photo-preview");
-    prev.innerHTML = `<img src="${URL.createObjectURL(newPhoto)}" alt="">`;
+document.getElementById("ed-photo").addEventListener("change", async e => {
+  const file = e.target.files[0] || null;
+  newPhoto = null;
+  const prev = document.getElementById("ed-photo-preview");
+  if (!file) return;
+  prev.innerHTML = "<span>Processing…</span>";
+  try {
+    newPhoto = await resizePhoto(file);
+    prev.innerHTML = `<img src="${newPhoto}" alt="">`;
     document.getElementById("ed-remove-photo").checked = false;
+  } catch (err) {
+    newPhoto = null;
+    prev.innerHTML = "<span>Error</span>";
+    edStatus.textContent = "Errore: " + err.message;
   }
 });
 
@@ -431,7 +457,7 @@ document.getElementById("ed-form").addEventListener("submit", async e => {
     if (icon) p.badge = { icon, title: btitle }; else delete p.badge;
     p.initial = (p.name || "?").charAt(0).toUpperCase();
     if (document.getElementById("ed-remove-photo").checked) delete p.img;
-    if (newPhoto && storage) p.img = await uploadPhoto(editingId, newPhoto);
+    if (newPhoto) p.img = newPhoto;
     await saveData();
     renderTree();
     closeEditor();
